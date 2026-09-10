@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0c3a2d">
+<title>Help &amp; FAQ — Zafar</title>
+<meta name="description" content="Answers to common questions about downloads, limits and favorites on Zafar.">
+<link rel="stylesheet" href="assets/css/app.css">
+<script>try{var t=localStorage.getItem("zafar_theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/demo.js"></script>
+  <script src="assets/js/shell.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var shell = ZafarShell.init({ active: "help", title: "Help & FAQ", crumb: "Support" });
+      if (!shell) return;
+
+      var QA = [
+        {
+          id: "limits",
+          q: "Why is there a daily download limit?",
+          a: "<p>Every account gets 10 paper downloads and 10 book downloads per day. The cap keeps one " +
+             "heavy user from slowing the library down for everyone else, and it resets automatically at midnight.</p>" +
+             "<p>Notes and marking keys draw from the same paper allowance server-side, so keep an eye on the " +
+             "badge at the top of each section.</p>",
+        },
+        {
+          id: "download",
+          q: "A download didn't start — what now?",
+          a: "<p>Downloads are prepared on demand: the app asks the server for a short-lived signed link, then " +
+             "fetches the file and hands it to your browser. If that link expires before the file finishes, just " +
+             "press <b>Download</b> again — an unfinished download doesn't count against your daily limit.</p>",
+        },
+        {
+          id: "favorites",
+          q: "Where are my favorites stored?",
+          a: "<p>Favorites are saved against your account name in this browser, so two people sharing a device " +
+             "never see each other's list. Clearing your browser storage clears them.</p>",
+        },
+        {
+          id: "password",
+          q: "I forgot my password.",
+          a: "<p>Self-service reset is coming — the sign-in screen already has the flow, but the server side " +
+             "isn't live yet. In the meantime, message the ZAFAR admin from the email address on your account " +
+             "and a new password will be set for you.</p>",
+        },
+        {
+          id: "missing",
+          q: "A paper or subject is missing.",
+          a: "<p>The library mirrors what's been published to the Zafar Drive folders. If a subject or year isn't " +
+             "there yet, it hasn't been uploaded — send the request through and it usually appears within a few days.</p>",
+        },
+        {
+          id: "offline",
+          q: "Can I use Zafar offline?",
+          a: "<p>Browsing needs a connection, because the catalogue lives on the server. Files you've already " +
+             "downloaded stay on your device and open without internet.</p>",
+        },
+      ];
+
+      shell.content.innerHTML =
+        '<section class="hero"><div><h2>How can we help?</h2>' +
+        "<p>Short answers to the questions students ask most. Still stuck? Reach the admin on WhatsApp and " +
+        "include the email on your account.</p></div>" +
+        '<div class="hero-actions"><a class="btn btn-primary" href="dashboard.html">Back to papers</a></div></section>' +
+
+        '<div class="grid grid-stats">' +
+          '<div class="stat"><div class="stat-head"><span class="stat-glyph">' + ZafarShell.svg("bolt", 17) +
+          '</span><span class="stat-label">Daily limit</span></div><div class="stat-value">' + DAILY_PAPER_LIMIT +
+          '</div><div class="stat-foot">papers and books, each per day</div></div>' +
+          '<div class="stat"><div class="stat-head"><span class="stat-glyph">' + ZafarShell.svg("clock", 17) +
+          '</span><span class="stat-label">Limit resets</span></div><div class="stat-value">00:00</div>' +
+          '<div class="stat-foot">every night, automatically</div></div>' +
+          '<div class="stat"><div class="stat-head"><span class="stat-glyph">' + ZafarShell.svg("layers", 17) +
+          '</span><span class="stat-label">Sections</span></div><div class="stat-value">4</div>' +
+          '<div class="stat-foot">papers, books, notes, marking keys</div></div>' +
+        "</div>" +
+
+        '<section class="stack"><div class="section-head"><h2>Frequently asked</h2></div>' +
+        '<div class="panel">' +
+          QA.map(function (item) {
+            return '<details class="qa" id="' + item.id + '"><summary>' + item.q +
+              '</summary><div class="qa-body">' + item.a + "</div></details>";
+          }).join("") +
+        "</div></section>" +
+
+        '<section class="stack"><div class="section-head"><h2>Keyboard shortcuts</h2></div>' +
+        '<div class="panel list">' +
+          '<div class="list-row"><span class="lines"><span class="name">/</span>' +
+          '<span class="sub">Focus the search box on any list page</span></span></div>' +
+          '<div class="list-row"><span class="lines"><span class="name">Esc</span>' +
+          '<span class="sub">Close the navigation drawer on mobile</span></span></div>' +
+        "</div></section>";
+
+      shell.count.textContent = QA.length + " answers";
+
+      // Deep links like help.html#password open the matching question.
+      if (location.hash) {
+        var target = document.querySelector(location.hash);
+        if (target && target.tagName === "DETAILS") {
+          target.open = true;
+          target.scrollIntoView({ block: "center" });
+        }
+      }
+    });
+  </script>
+</body>
+</html>
