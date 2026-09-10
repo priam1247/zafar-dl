@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create account — Zafar</title>
+<meta name="description" content="Create a free Zafar account to download past papers, textbooks and notes.">
+<link rel="stylesheet" href="assets/css/app.css">
+<script>try{var t=localStorage.getItem("zafar_theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+</head>
+<body>
+  <div class="auth">
+    <aside class="auth-aside">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.837l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>
+        </span>
+        <span class="brand-text"><span class="brand-name">Zafar</span><span class="brand-sub">Study library</span></span>
+      </a>
+      <div>
+        <h2>One account. The whole exam archive.</h2>
+        <p>Accounts exist for one reason: fair download limits, so the library stays fast for everybody. No fees, no ads.</p>
+      </div>
+      <div class="auth-points">
+        <div class="auth-point">
+          <span class="tick"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+          <span><b>Free forever</b><span>10 paper downloads and 10 book downloads every day.</span></span>
+        </div>
+        <div class="auth-point">
+          <span class="tick"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+          <span><b>Only a username needed</b><span>No phone number, no verification hoops.</span></span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="auth-main">
+      <form class="auth-card" id="register-form" novalidate>
+        <div>
+          <h1 style="font-size:26px">Create your account</h1>
+          <p style="margin:6px 0 0;color:var(--text-mute)">Takes about ten seconds.</p>
+        </div>
+
+        <div class="field">
+          <label for="username">Username</label>
+          <input id="username" name="username" type="text" autocomplete="username" required placeholder="your.username">
+          <span class="hint">Letters, numbers, dots and underscores.</span>
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="new-password" required placeholder="At least 8 characters">
+        </div>
+
+        <div class="field">
+          <label for="confirm">Confirm password</label>
+          <input id="confirm" name="confirm" type="password" autocomplete="new-password" required placeholder="Repeat your password">
+        </div>
+
+        <div class="state danger" id="register-error" style="padding:12px 14px;text-align:left;align-items:flex-start;border-style:solid;background:var(--danger-bg);border-color:transparent">
+          <p id="register-error-text" style="color:var(--danger-500);font-weight:600"></p>
+        </div>
+
+        <button class="btn btn-primary btn-lg btn-block" type="submit" id="register-submit">Create account</button>
+
+        <p class="auth-alt">Already have one? <a href="login.html">Sign in</a></p>
+      </form>
+    </main>
+  </div>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/demo.js"></script>
+  <script>
+    (function () {
+      var form = document.getElementById("register-form");
+      var errBox = document.getElementById("register-error");
+      var errText = document.getElementById("register-error-text");
+      var submit = document.getElementById("register-submit");
+
+      function fail(msg) {
+        errText.textContent = msg;
+        errBox.classList.add("show");
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        errBox.classList.remove("show");
+
+        var username = form.username.value.trim();
+        var password = form.password.value;
+        if (username.length < 3) return fail("Pick a username with at least 3 characters.");
+        if (password.length < 8) return fail("Use a password with at least 8 characters.");
+        if (password !== form.confirm.value) return fail("The two passwords don't match.");
+
+        submit.disabled = true;
+        submit.textContent = "Creating account…";
+
+        Zafar.postJSON("/auth/register", { username: username, password: password })
+          .then(function () {
+            // Registration doesn't return a token, so sign in straight away.
+            return Zafar.postForm("/auth/login", { username: username, password: password });
+          })
+          .then(function (data) {
+            Zafar.setToken(data.access_token, true);
+            location.href = "home.html";
+          })
+          .catch(function (err) {
+            submit.disabled = false;
+            submit.textContent = "Create account";
+            if (err instanceof TypeError) fail("Can't reach the Zafar server right now — try again shortly.");
+            else fail((err && err.message) || "Could not create the account.");
+          });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marking Keys — Zafar</title>
+<meta name="description" content="Official marking keys and answer schemes.">
+<link rel="stylesheet" href="assets/css/app.css">
+<script>try{var t=localStorage.getItem("zafar_theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/demo.js"></script>
+  <script src="assets/js/shell.js"></script>
+  <script src="assets/js/list.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var shell = ZafarShell.init({ active: "keys", title: "Marking Keys", crumb: "Library" });
+      if (!shell) return;
+      ZafarList.init({
+        section: "marking-keys",
+        quotaKey: null,
+        itemLabel: "marking key",
+        searchPlaceholder: "Search marking keys by subject or year…",
+        categories: ["MSCE Maneb", "JCE Maneb"],
+      }, shell);
+    });
+  </script>
+</body>
+</html>
