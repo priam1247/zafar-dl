@@ -7,7 +7,8 @@
 
 var ZafarShell = (function () {
   var ICONS = {
-    logo: '<path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.837l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>',
+    // Same open-book mark as the auth screen, so the brand reads as one thing.
+    logo: '<path d="M12 5C10.2 3.6 7.6 3 5 3v13c2.6 0 5.2.6 7 2 1.8-1.4 4.4-2 7-2V3c-2.6 0-5.2.6-7 2Z"/><path d="M12 5v13"/>',
     home: '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
     book: '<path d="M12 5v16"/><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"/>',
     file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',
@@ -115,7 +116,7 @@ var ZafarShell = (function () {
         '<div class="sidebar-header">' +
           '<a class="brand" href="home.html">' +
             '<span class="brand-mark">' + svg("logo", 19) + "</span>" +
-            '<span class="brand-text"><span class="brand-name">Zafar</span>' +
+            '<span class="brand-text"><span class="brand-name">ZAFAR</span>' +
             '<span class="brand-sub">Study library</span></span>' +
           "</a>" +
           '<button class="icon-btn close-btn" data-close aria-label="Close menu">' + svg("close", 18) + "</button>" +

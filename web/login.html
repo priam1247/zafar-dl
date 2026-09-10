@@ -3,128 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sign in — Zafar</title>
-<meta name="description" content="Sign in to Zafar to download MANEB past papers, textbooks and notes.">
+<title>ZAFAR — Acquire knowledge</title>
+<meta name="description" content="Sign in to ZAFAR for 12+ years of MSCE and JCE past papers, marking keys and notes.">
+<meta name="theme-color" content="#0c3a2d">
 <link rel="stylesheet" href="assets/css/app.css">
+<link rel="stylesheet" href="assets/css/auth.css">
+<link rel="preload" as="image" href="assets/img/hero.jpg">
 <script>try{var t=localStorage.getItem("zafar_theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
 </head>
 <body>
-  <div class="auth">
-    <aside class="auth-aside">
-      <a class="brand" href="index.html">
-        <span class="brand-mark">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.837l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>
-        </span>
-        <span class="brand-text"><span class="brand-name">Zafar</span><span class="brand-sub">Study library</span></span>
-      </a>
-
-      <div>
-        <h2>Every past paper you need, without the group-chat hunt.</h2>
-        <p>MSCE and JCE papers, mocks, textbooks, notes and marking keys — organised, searchable and free to download.</p>
-      </div>
-
-      <div class="auth-points">
-        <div class="auth-point">
-          <span class="tick"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
-          <span><b>Organised by exam and year</b><span>MANEB MSCE, JCE, mocks and regional papers, all labelled.</span></span>
-        </div>
-        <div class="auth-point">
-          <span class="tick"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
-          <span><b>Fast, direct downloads</b><span>Files stream from the edge — no ad walls, no waiting rooms.</span></span>
-        </div>
-        <div class="auth-point">
-          <span class="tick"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
-          <span><b>Favorites that follow your account</b><span>Save a paper once and find it on any page, instantly.</span></span>
-        </div>
-      </div>
-    </aside>
-
-    <main class="auth-main">
-      <form class="auth-card" id="login-form" novalidate>
-        <div>
-          <h1 style="font-size:26px">Welcome back</h1>
-          <p style="margin:6px 0 0;color:var(--text-mute)">Sign in to keep downloading.</p>
-        </div>
-
-        <div class="field">
-          <label for="username">Username</label>
-          <input id="username" name="username" type="text" autocomplete="username" required placeholder="your.username">
-        </div>
-
-        <div class="field">
-          <label for="password">Password</label>
-          <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="••••••••">
-        </div>
-
-        <div class="row" style="justify-content:space-between">
-          <label class="checkbox"><input type="checkbox" id="remember" checked> Keep me signed in</label>
-          <a href="help.html#password" style="font-size:13.5px;color:var(--brand-600);font-weight:600">Forgot password?</a>
-        </div>
-
-        <div class="state danger" id="login-error" style="padding:12px 14px;text-align:left;align-items:flex-start;border-style:solid;background:var(--danger-bg);border-color:transparent">
-          <p id="login-error-text" style="color:var(--danger-500);font-weight:600"></p>
-        </div>
-
-        <button class="btn btn-primary btn-lg btn-block" type="submit" id="login-submit">Sign in</button>
-
-        <div class="divider">or</div>
-
-        <a class="btn btn-ghost btn-block" href="home.html?demo=1">Explore the demo — no account needed</a>
-
-        <p class="auth-alt">New here? <a href="register.html">Create a free account</a></p>
-      </form>
-    </main>
-  </div>
+  <div id="auth"></div>
 
   <script src="assets/js/config.js"></script>
   <script src="assets/js/demo.js"></script>
-  <script>
-    (function () {
-      // Already signed in? Skip the form.
-      if (Zafar.getToken() && !location.search.includes("switch")) {
-        location.replace("home.html");
-        return;
-      }
-
-      var form = document.getElementById("login-form");
-      var errBox = document.getElementById("login-error");
-      var errText = document.getElementById("login-error-text");
-      var submit = document.getElementById("login-submit");
-
-      function fail(msg) {
-        errText.textContent = msg;
-        errBox.classList.add("show");
-      }
-
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        errBox.classList.remove("show");
-
-        var username = form.username.value.trim();
-        var password = form.password.value;
-        if (!username || !password) return fail("Enter both your username and password.");
-
-        submit.disabled = true;
-        submit.textContent = "Signing in…";
-
-        // /auth/login uses FastAPI's OAuth2PasswordRequestForm, so the
-        // credentials go up as form fields rather than JSON.
-        Zafar.postForm("/auth/login", { username: username, password: password })
-          .then(function (data) {
-            Zafar.setToken(data.access_token, document.getElementById("remember").checked);
-            location.href = "home.html";
-          })
-          .catch(function (err) {
-            submit.disabled = false;
-            submit.textContent = "Sign in";
-            if (err instanceof TypeError) {
-              fail("Can't reach the Zafar server right now. You can still explore the demo below.");
-            } else {
-              fail((err && err.message) || "Sign in failed.");
-            }
-          });
-      });
-    })();
-  </script>
+  <script src="assets/js/auth.js"></script>
 </body>
 </html>

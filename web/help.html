@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0c3a2d">
 <title>Help &amp; FAQ — Zafar</title>
 <meta name="description" content="Answers to common questions about downloads, limits and favorites on Zafar.">
 <link rel="stylesheet" href="assets/css/app.css">
@@ -44,8 +45,9 @@
         {
           id: "password",
           q: "I forgot my password.",
-          a: "<p>There's no self-service reset yet. Message the Zafar admin with your username and a new account " +
-             "password will be set for you.</p>",
+          a: "<p>Self-service reset is coming — the sign-in screen already has the flow, but the server side " +
+             "isn't live yet. In the meantime, message the ZAFAR admin from the email address on your account " +
+             "and a new password will be set for you.</p>",
         },
         {
           id: "missing",
@@ -64,7 +66,7 @@
       shell.content.innerHTML =
         '<section class="hero"><div><h2>How can we help?</h2>' +
         "<p>Short answers to the questions students ask most. Still stuck? Reach the admin on WhatsApp and " +
-        "include your username.</p></div>" +
+        "include the email on your account.</p></div>" +
         '<div class="hero-actions"><a class="btn btn-primary" href="dashboard.html">Back to papers</a></div></section>' +
 
         '<div class="grid grid-stats">' +

@@ -60,8 +60,8 @@ var Zafar = {
 
   // Bookmarks / recent downloads are per-account, not per-device: two
   // accounts sharing a browser must never see each other's data. The JWT's
-  // "sub" claim is decoded client-side and used purely as a storage key
-  // namespace — never as an auth decision.
+  // "sub" claim (the account's email address) is decoded client-side and
+  // used purely as a storage key namespace — never as an auth decision.
   _currentUserSuffix: function () {
     var token = this.getToken();
     if (!token) return "anon";
@@ -73,9 +73,13 @@ var Zafar = {
       return "anon";
     }
   },
+  // Friendly display name. The JWT subject is an email address, so greet
+  // people with the local part rather than the whole address.
   username: function () {
     var sub = this._currentUserSuffix();
-    return sub === "anon" ? "there" : sub;
+    if (sub === "anon") return "there";
+    var local = sub.split("@")[0].replace(/[._-]+/g, " ").trim();
+    return local.charAt(0).toUpperCase() + local.slice(1);
   },
   // One-time migration: the first version of this app stored bookmarks and
   // downloads under one shared key for every account on the device.
@@ -201,6 +205,7 @@ var Zafar = {
       });
   },
 
+  // JSON request (/auth/register, /auth/verify, /auth/resend).
   postJSON: function (path, body) {
     var self = this;
     return fetch(API_BASE_URL + path, {
@@ -213,7 +218,8 @@ var Zafar = {
   },
 
   // application/x-www-form-urlencoded (for /auth/login, which uses
-  // FastAPI's OAuth2PasswordRequestForm and expects form fields).
+  // FastAPI's OAuth2PasswordRequestForm and expects form fields:
+  // email + password).
   postForm: function (path, fields) {
     var self = this;
     var params = new URLSearchParams();
